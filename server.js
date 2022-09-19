@@ -7,6 +7,8 @@ import dbConfig from "./src/config/database.js";
 
 //routes
 import authRoutes from "./src/routes/authRoutes.js";
+import coursesRoutes from "./src/routes/coursesRoutes.js";
+import { verifyToken } from "./src/middleware/verifyToken.js";
 
 const app = express();
 
@@ -23,6 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", authRoutes);
+app.use("/courses", verifyToken, coursesRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on PORT ${process.env.PORT}`);

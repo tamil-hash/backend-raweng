@@ -19,6 +19,7 @@ export const registerUser = async (req, res, next) => {
         name,
         email: email.toLowerCase(),
         password: encryptedPassword,
+        role: "Learner",
       });
 
       res.status(201).json(user);
@@ -32,7 +33,7 @@ export const loginUser = async (req, res, next) => {
   if (!(email && password)) {
     res.status(400).send("All input is required");
   } else {
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email: email.toLowerCase() });
 
     if (user && bcrypt.compare(password, user.password)) {
       const token = jwt.sign(
@@ -42,10 +43,13 @@ export const loginUser = async (req, res, next) => {
           expiresIn: "2h",
         }
       );
-
-      user.token = token;
-      // user
-      res.status(200).json(user);
+      const newUser = {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        token,
+      };
+      res.status(200).json(newUser);
     } else {
       res.status(400).send("Invalid Credentials");
     }
