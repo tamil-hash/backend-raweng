@@ -19,10 +19,6 @@ dotenv.config({ path: ".env" });
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  next();
-});
 
 app.use("/", authRoutes);
 app.use("/courses", verifyToken, coursesRoutes);

@@ -3,9 +3,9 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
 export const registerUser = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
-  if (!(email && password && name)) {
+  if (!(email && password && name && role)) {
     res.status(400).send("All input is required");
   } else {
     const oldUser = await User.findOne({ email });
@@ -19,7 +19,7 @@ export const registerUser = async (req, res, next) => {
         name,
         email: email.toLowerCase(),
         password: encryptedPassword,
-        role: "Learner",
+        role,
       });
 
       res.status(201).json(user);
