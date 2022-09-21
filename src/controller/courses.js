@@ -17,3 +17,13 @@ export const getAllCourses = async (req, res, next) => {
   res.status(200).send(courses);
 };
 
+export const deleteCourse = async (req, res, next) => {
+  const { courseId } = req.params;
+  if (!courseId) {
+    res.status(400).json("Course id missing");
+  } else {
+    await Courses.deleteOne({ _id: courseId });
+    res.status(200).json("Course Deleted Successfully.");
+  }
+};
+
